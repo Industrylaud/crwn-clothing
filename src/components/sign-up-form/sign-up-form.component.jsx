@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+
+import FormInput from '../form-input/form-input.component';
+import Button from '../button/button.component';
+import { UserContext } from '../../context/user.context';
+
 import {
 	createAuthUserWithEmailAndPassword,
 	createUserDocumentFromAuth,
 } from '../../utils/firebase/firebase.utils';
 
-import FormInput from '../form-input/form-input.component';
-import Button from '../button/button.component';
 import './sign-up-form.styles.scss';
 
 const defaultFormfields = {
@@ -18,6 +21,7 @@ const defaultFormfields = {
 const SignUpForm = () => {
 	const [formFields, setformFields] = useState(defaultFormfields);
 	const { displayName, email, password, confirmPassword } = formFields;
+	const { setCurrentUser } = useContext(UserContext);
 
 	const resetFormFields = () => {
 		setformFields(defaultFormfields);
@@ -39,8 +43,10 @@ const SignUpForm = () => {
 			);
 
 			user.displayName = displayName;
+
 			await createUserDocumentFromAuth(user);
 			resetFormFields();
+			setCurrentUser(user);
 		} catch (error) {
 			if (error.code === 'auth/email-already-in-use') {
 				alert('Cannot create user, email already in use');
@@ -97,9 +103,7 @@ const SignUpForm = () => {
 					value={confirmPassword}
 				/>
 
-				<Button buttonType='inverted' type='submit'>
-					Sign Up
-				</Button>
+				<Button type='submit'>Sign Up</Button>
 			</form>
 		</div>
 	);
