@@ -11,7 +11,7 @@ import {
 
 import './sign-up-form.styles.scss';
 
-const defaultFormfields = {
+const defaultFormFields = {
 	displayName: '',
 	email: '',
 	password: '',
@@ -19,12 +19,12 @@ const defaultFormfields = {
 };
 
 const SignUpForm = () => {
-	const [formFields, setformFields] = useState(defaultFormfields);
+	const [formFields, setFormFields] = useState(defaultFormFields);
 	const { displayName, email, password, confirmPassword } = formFields;
 	const { setCurrentUser } = useContext(UserContext);
 
 	const resetFormFields = () => {
-		setformFields(defaultFormfields);
+		setFormFields(defaultFormFields);
 	};
 
 	const handleSubmit = async (event) => {
@@ -32,7 +32,6 @@ const SignUpForm = () => {
 
 		if (password !== confirmPassword) {
 			alert('passwords do not match');
-
 			return;
 		}
 
@@ -42,16 +41,14 @@ const SignUpForm = () => {
 				password
 			);
 
-			user.displayName = displayName;
-
-			await createUserDocumentFromAuth(user);
+			await createUserDocumentFromAuth(user, { displayName });
 			resetFormFields();
 			setCurrentUser(user);
 		} catch (error) {
 			if (error.code === 'auth/email-already-in-use') {
 				alert('Cannot create user, email already in use');
 			} else {
-				console.error('user creation ecountered an erroe', error);
+				console.log('user creation encountered an error', error);
 			}
 		}
 	};
@@ -59,7 +56,7 @@ const SignUpForm = () => {
 	const handleChange = (event) => {
 		const { name, value } = event.target;
 
-		setformFields({ ...formFields, [name]: value });
+		setFormFields({ ...formFields, [name]: value });
 	};
 
 	return (
@@ -102,7 +99,6 @@ const SignUpForm = () => {
 					name='confirmPassword'
 					value={confirmPassword}
 				/>
-
 				<Button type='submit'>Sign Up</Button>
 			</form>
 		</div>
