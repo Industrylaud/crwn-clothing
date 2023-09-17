@@ -24,3 +24,5 @@ yarn-error.log*
 .vscode
 .env
 .idea
+/.netlify/edge-functions-import-map.json
+/.netlify/state.json
